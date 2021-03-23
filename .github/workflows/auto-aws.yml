@@ -38,8 +38,9 @@ jobs:
       # Получение id EC2 серверах
       - name: Describe instances
         run: |
+          aws ec2 describe-instances > instance1.json
           echo 'INSTANCE_ID<<EOF' >> $GITHUB_ENV
-          aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId' --output text >> $GITHUB_ENV
+          cat instance1.json | grep "i-" | awk {'print $2'} >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
       - name: Print instance id
