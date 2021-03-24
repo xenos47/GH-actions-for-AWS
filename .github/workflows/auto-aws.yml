@@ -11,6 +11,7 @@ env:
   SUBNET2          : "subnet-6a862916"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
+  TARGET_GRP_NAME  : "test-target-group" 
   
 # Запускаем по событию. 
 on:
@@ -69,8 +70,15 @@ jobs:
           cat alb1.json | grep "\"vpc-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
+      - name: Creating target group
+        run: |
+          aws elbv2 create-target-group --name ${{ env.TARGET_GRP_NAME }} --protocol HTTP --port 80 --vpc-id ${{ env.VPC_ID }} > vpc1.json
+          echo 'VPC_ARN<<EOF' >> $GITHUB_ENV
+          cat vpc1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          
       - name: Print instance id
-        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }}"
+        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }} vpc_arn = ${{ env.VPC_ARN }}"
     
-#EOF                  
+#EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
