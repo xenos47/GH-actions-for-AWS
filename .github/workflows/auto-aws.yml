@@ -7,7 +7,11 @@ name: EC2-Launch
 env:
   TEMPLATE_ID      : "lt-0083ac67d8006e1a5"
   TEMPLATE_VERSION : "1"
-
+  SUBNET1          : "subnet-b47000de"
+  SUBNET2          : "subnet-6a862916"
+  SECURITY_GROUP   : "sg-0be89dd414f0479d5"
+  ALB_NAME         : "test-ALB"
+  
 # Запускаем по событию. 
 on:
   # Ручками в Actions вкладке
@@ -38,24 +42,32 @@ jobs:
           aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region             : "eu-central-1"
           
-      # Запуск и получение id первого EC2 сервера
-      - name: Launch instance 1
-        run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance1.json
-          echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
-          cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+#      # Запуск и получение id первого EC2 сервера
+#      - name: Launch instance 1
+#        run: |
+#          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance1.json
+#          echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
+#          cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+#          echo 'EOF' >> $GITHUB_ENV
+#          
+#      # Запуск и получение id второго EC2 сервера
+#      - name: Launch instance 2
+#        run: |
+#          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance2.json
+#          echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
+#          cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+#          echo 'EOF' >> $GITHUB_ENV
           
-      # Запуск и получение id второго EC2 сервера
-      - name: Launch instance 2
+      # Запуск ALB и получение arn
+      - name: Start ALB
         run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance2.json
-          echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
-          cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+          aws elbv2 create-load-balancer --name ${{ env.ALB_NAME }} --subnets ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} --security-groups ${{ env.SECURITY_GROUP }} > alb1.json
+          echo 'ALB_ARN<<EOF' >> $GITHUB_ENV
+          cat alb1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
       - name: Print instance id
-        run: echo "${{ env.INSTANCE_ID1 }} + ${{ env.INSTANCE_ID2 }}"
+        run: echo "arn = ${{ env.ALB_ARN }}"
     
 #EOF                  
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
