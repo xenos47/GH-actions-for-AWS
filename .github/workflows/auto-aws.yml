@@ -5,7 +5,7 @@
 
 name: EC2-Launch
 env:
-  TEMPLATE_ID      : "lt-0083ac67d8006e1a5"
+  TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
   TEMPLATE_VERSION : "1"
   SUBNET1          : "subnet-b47000de"
   SUBNET2          : "subnet-6a862916"
