@@ -73,12 +73,17 @@ jobs:
       - name: Creating target group
         run: |
           aws elbv2 create-target-group --name ${{ env.TARGET_GRP_NAME }} --protocol HTTP --port 80 --vpc-id ${{ env.VPC_ID }} > vpc1.json
-          echo 'VPC_ARN<<EOF' >> $GITHUB_ENV
+          echo 'TARGET_GRP_ARN<<EOF' >> $GITHUB_ENV
           cat vpc1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
-      - name: Print instance id
-        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }} vpc_arn = ${{ env.VPC_ARN }}"
+      - name: Creating listener
+        run: |
+          aws elbv2 register-targets --target-group-arn ${{ env.TARGET_GROUP_ARN }} --targets Id=i-02ebab597f92147b8 Id=i-0c52bef90ccc90ab7
+          aws elbv2 create-listener --load-balancer-arn ${{ env.ALB_ARN }} --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=${{ env.TARGET_GROUP_ARN }}
+          
+#      - name: Print instance id
+#        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }} target_group_arn = ${{ env.TARGET_GRP_ARN }}"
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
