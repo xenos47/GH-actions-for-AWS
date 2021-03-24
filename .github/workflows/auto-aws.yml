@@ -1,9 +1,12 @@
 #------------------------------------------------------------------
-# Осваиваю GitHub Actions в связке AWS EC2
+# Запуск двух серверов AWS EC2 по шаблону
 # 
 #------------------------------------------------------------------
 
-name: EC2-Describe
+name: EC2-Launch
+env:
+  TEMPLATE_ID      : "lt-0083ac67d8006e1a5"
+  TEMPLATE_VERSION : "1"
 
 # Запускаем по событию. 
 on:
@@ -13,8 +16,8 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   
-  # Выведем информацию об имеющихся серверах
-  AWS-describe:
+  # Задача: Запуск серверов
+  AWS-launch:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -35,18 +38,18 @@ jobs:
           aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region             : "eu-central-1"
           
-      # Получение id первого EC2 сервера
-      - name: Describe instance 1
+      # Запуск и получение id первого EC2 сервера
+      - name: Launch instance 1
         run: |
-          aws ec2 describe-instances > instance1.json
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance1.json
           echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
           cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
-      # Получение id второго EC2 сервера
-      - name: Describe instance 2
+      # Запуск и получение id второго EC2 сервера
+      - name: Launch instance 2
         run: |
-          aws ec2 describe-instances > instance2.json
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance2.json
           echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
           cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
