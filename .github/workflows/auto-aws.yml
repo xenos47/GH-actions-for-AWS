@@ -46,7 +46,7 @@ jobs:
       # Запуск и получение id первого EC2 сервера
       - name: Launch instance 1
         run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance1.json
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script1.txt > instance1.json
           echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
           cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -54,7 +54,7 @@ jobs:
       # Запуск и получение id второго EC2 сервера
       - name: Launch instance 2
         run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} > instance2.json
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script2.txt> instance2.json
           echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
           cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
