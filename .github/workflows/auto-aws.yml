@@ -35,16 +35,24 @@ jobs:
           aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region             : "eu-central-1"
           
-      # Получение id EC2 серверах
+      # Получение id первого EC2 сервера
       - name: Describe instances
         run: |
           aws ec2 describe-instances > instance1.json
-          echo 'INSTANCE_ID<<EOF' >> $GITHUB_ENV
+          echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
+          cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          
+      # Получение id второго EC2 сервера
+      - name: Describe instances
+        run: |
+          aws ec2 describe-instances > instance1.json
+          echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
           cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           
       - name: Print instance id
-        run: echo "${{ env.INSTANCE_ID }}"
+        run: echo "${{ env.INSTANCE_ID1 }} + ${{ env.INSTANCE_ID2 }}"
     
 #EOF                  
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
