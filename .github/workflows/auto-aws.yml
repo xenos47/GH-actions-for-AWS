@@ -65,9 +65,12 @@ jobs:
           echo 'ALB_ARN<<EOF' >> $GITHUB_ENV
           cat alb1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+          echo 'VPC_ID<<EOF' >> $GITHUB_ENV
+          cat alb1.json | grep "\"vpc-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
           
       - name: Print instance id
-        run: echo "arn = ${{ env.ALB_ARN }}"
+        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }}"
     
 #EOF                  
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
