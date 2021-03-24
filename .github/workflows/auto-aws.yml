@@ -1,6 +1,6 @@
 #------------------------------------------------------------------
-# Запуск двух серверов AWS EC2 по шаблону
-# 
+# Запуск двух инстансов AWS EC2 по шаблону
+# Запуск ALB и настройка работы инстансов через ALB
 #------------------------------------------------------------------
 
 name: EC2-Launch
@@ -88,8 +88,6 @@ jobs:
           aws elbv2 register-targets --target-group-arn ${{ env.TARGET_GRP_ARN }} --targets Id=${{ env.INSTANCE_ID1 }} Id=${{ env.INSTANCE_ID2 }}
           aws elbv2 create-listener --load-balancer-arn ${{ env.ALB_ARN }} --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=${{ env.TARGET_GRP_ARN }}
           
-#      - name: Print instance id
-#        run: echo "arn = ${{ env.ALB_ARN }} vpc = ${{ env.VPC_ID }} target_group_arn = ${{ env.TARGET_GRP_ARN }}"
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
