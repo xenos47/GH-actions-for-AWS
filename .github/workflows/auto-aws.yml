@@ -58,6 +58,12 @@ jobs:
           echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
           cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+          
+      # Ждём, пока поднимутся сервера
+      - name: Sleep for 60 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '60s'
 
       # Запуск ALB и получение arn
       - name: Start ALB
