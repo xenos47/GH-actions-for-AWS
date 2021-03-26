@@ -11,7 +11,7 @@ env:
   SUBNET2          : "subnet-6a862916"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
-# TARGET_GRP_NAME  : "test-target-group" 
+  TARGET_GRP_NAME  : "test-target-group" 
   
 # Запускаем по событию. 
 on:
@@ -45,7 +45,7 @@ jobs:
           
       # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: sh ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} ${{ env.SECURITY_GROUP }}
+        run: sh ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} ${{ env.SECURITY_GROUP }} ${{ env.TARGET_GRP_NAME }}
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
