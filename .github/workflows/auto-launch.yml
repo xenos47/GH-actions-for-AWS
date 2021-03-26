@@ -1,0 +1,51 @@
+#------------------------------------------------------------------
+# Запуск нескольких инстансов AWS EC2 по шаблону
+# через вызов bash-скрипта 
+#------------------------------------------------------------------
+
+name: EC2-Launch
+env:
+  TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
+  TEMPLATE_VERSION : "1"
+# SUBNET1          : "subnet-b47000de"
+# SUBNET2          : "subnet-6a862916"
+# SECURITY_GROUP   : "sg-0be89dd414f0479d5"
+# ALB_NAME         : "test-ALB"
+# TARGET_GRP_NAME  : "test-target-group" 
+  
+# Запускаем по событию. 
+on:
+  # Ручками в Actions вкладке
+  workflow_dispatch:
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  # Задача: Запуск серверов
+  AWS-EC2-launch:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Используем настроенную среду
+    environment:
+      name: My_AWS
+      
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Аутентификация
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id      : ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region             : "eu-central-1"
+          
+      # Запускаем bash скрипт, пытаясь пердать параметры
+      - name: Executing bash-script
+        run: sh ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} 
+    
+#EOF    
+#""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
