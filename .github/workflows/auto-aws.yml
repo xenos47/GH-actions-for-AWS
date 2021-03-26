@@ -3,7 +3,7 @@
 # Запуск ALB и настройка работы инстансов через ALB
 #------------------------------------------------------------------
 
-name: EC2-Launch
+name: 2_EC2_ALB_Launch
 env:
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
   TEMPLATE_VERSION : "1"
