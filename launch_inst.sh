@@ -20,7 +20,7 @@
 #
 #done
 
-lb_values=$(aws elbv2 create-load-balancer --name $3 --subnets $4 $5 --security-groups $6 --query "LoadBalancers"[].[LoadBalancerArn, VpcId] --output text)
+lb_values=$(aws elbv2 create-load-balancer --name $3 --subnets $4 $5 --security-groups $6 --query "LoadBalancers"[].{LoadBalancerArn, VpcId} --output text)
 
 lb_arn="${lb_values[0]}"    # Получаем два значения из --query запроса
 vpc_id="${lb_values[1]}"    # строкой выше
