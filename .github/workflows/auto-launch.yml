@@ -7,10 +7,10 @@ name: EC2-Launch
 env:
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
   TEMPLATE_VERSION : "1"
-# SUBNET1          : "subnet-b47000de"
-# SUBNET2          : "subnet-6a862916"
-# SECURITY_GROUP   : "sg-0be89dd414f0479d5"
-# ALB_NAME         : "test-ALB"
+  SUBNET1          : "subnet-b47000de"
+  SUBNET2          : "subnet-6a862916"
+  SECURITY_GROUP   : "sg-0be89dd414f0479d5"
+  ALB_NAME         : "test-ALB"
 # TARGET_GRP_NAME  : "test-target-group" 
   
 # Запускаем по событию. 
@@ -43,9 +43,9 @@ jobs:
           aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region             : "eu-central-1"
           
-      # Запускаем bash скрипт, пытаясь пердать параметры
+      # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: sh ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} 
+        run: sh ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} ${{ env.SECURITY_GROUP }}
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
