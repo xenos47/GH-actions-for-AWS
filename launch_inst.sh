@@ -20,8 +20,7 @@
 #
 #done
 
-lb_arn=$(aws elbv2 create-load-balancer --name $3 --subnets $4 $5 --security-groups $6)
+lb_arn=$(aws elbv2 create-load-balancer --name $3 --subnets $4 $5 --security-groups $6 --query "LoadBalancers"[].LoadBalancerArn --output text)
 
 echo "LoadBalancerArn: ${lb_arn}"
 
-#inst_st=$(($inst_st + 1)) Получение цифровых значений из строки в bash
