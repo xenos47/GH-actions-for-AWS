@@ -25,7 +25,8 @@ for inst_id in $instances; do
 	        
 done
 
-echo "Id=${instances[@]}"
+instances=( "${instances[@]/%/foo}" )
+echo "${instances}"
 #echo "$id_instances"
 
 #for inst_id1 in $id_instances; do
