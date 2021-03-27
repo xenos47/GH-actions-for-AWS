@@ -19,11 +19,11 @@ for inst_id in $instances; do
 	echo "Instance with id: ${inst_id} is running!!!"
 	echo "Id=${inst_id}"
 	        
-done
-
-for inst_id1 in $id_instances; do
-	echo "The new format: ${inst_id1}"
-done
+#done
+#
+#for inst_id1 in $id_instances; do
+#	echo "The new format: ${inst_id1}"
+#done
 
 
 #inst_st=$(($inst_st + 1)) Получение цифровых значений из строки в bash
