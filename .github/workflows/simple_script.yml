@@ -3,7 +3,7 @@
 #  
 #------------------------------------------------------------------
 
-name: EC2-Launch
+name: Simple-script
 #env:
 #  VARIABLE 1       : "lt-04b30e2dc9209f94b"
 #  VARIABLE 2       : "1"
