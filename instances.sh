@@ -17,7 +17,7 @@ for inst_id in $instances; do
         done
 
 	echo "Instance with id: ${inst_id} is running!!!"
-	id_instances+=("Id\=${inst_id}")
+	echo "Id=${inst_id}"
 	        
 done
 
