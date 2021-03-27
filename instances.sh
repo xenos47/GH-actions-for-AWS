@@ -19,8 +19,8 @@ for inst_id in $instances; do
 
 	echo "Instance with id: ${inst_id} is running!!!"
 	echo "Id=${inst_id}"
-	#id_instances+=("Id=${inst_id}")
-	id_instances+=( apple )
+	id_instances+=("Id=${inst_id}")
+	
 	        
 done
 #
