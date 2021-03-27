@@ -40,7 +40,7 @@ jobs:
           
       # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: sh ./instances.sh # ${{ env.VARIABLE1 }} ${{ env.VARIABLE2 }}
+        run: ./instances.sh # ${{ env.VARIABLE1 }} ${{ env.VARIABLE2 }}
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
