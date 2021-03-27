@@ -6,7 +6,7 @@ for inst_id in $instances; do
 
 	while true; 
 	do
-		inst_st="$(sudo docker run --rm -v ~/.aws:/root/.aws amazon/aws-cli ec2 describe-instance-status --instance-id $inst_id --include-all-instances --query "InstanceStatuses"[].InstanceState.Code --output text)"
+		inst_st="$(aws ec2 describe-instance-status --instance-id $inst_id --include-all-instances --query "InstanceStatuses"[].InstanceState.Code --output text)"
 			if [ "$inst_st" = "16" ] ; then
 				
 				break # or add more commands to finilize the process
