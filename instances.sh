@@ -19,7 +19,7 @@ for inst_id in $instances; do
 	echo "Instance with id: ${inst_id} is running!!!"
 	echo "Id=${inst_id}"
 	        
-#done
+done
 #
 #for inst_id1 in $id_instances; do
 #	echo "The new format: ${inst_id1}"
