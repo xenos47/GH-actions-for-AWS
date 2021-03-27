@@ -1,0 +1,36 @@
+#------------------------------------------------------------------
+# Запуск любого bash-скрипта в GH Actions
+#  (в учебных целях)
+#------------------------------------------------------------------
+
+name: Simple-script
+#env:
+#  VARIABLE 1       : "foo"
+#  VARIABLE 2       : "bar"
+  
+# Запускаем по событию. 
+on:
+  # Ручками в Actions вкладке
+  workflow_dispatch:
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  # Задача: Запуск серверов
+  Runnig-script:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Используем настроенную среду
+    environment:
+      name: My_bash
+      
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+                
+      # Запускаем bash скрипт, пытаясь передать параметры
+      - name: Executing bash-script
+        run: ./testing-bash.sh # ${{ env.VARIABLE1 }} ${{ env.VARIABLE2 }}
+    
+#EOF    
+#""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
