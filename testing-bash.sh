@@ -1,4 +1,4 @@
-#!bash
+#! /bin/bash
 
 var=11
 slots=3
