@@ -19,13 +19,14 @@ for inst_id in $instances; do
 
 	echo "Instance with id: ${inst_id} is running!!!"
 	#id_instances+=("Id=${inst_id}")
-	id_instances=(${id_instances[@]} "Id=${inst_id}")
+	#id_instances=(${id_instances[@]} "Id=${inst_id}")
+	
 	
 	        
 done
 
-echo "$instances"
-echo "$id_instances"
+echo "Id=${instances}"
+#echo "$id_instances"
 
 #for inst_id1 in $id_instances; do
 #	echo "The new format: ${inst_id1}"
