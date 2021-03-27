@@ -35,7 +35,7 @@ for inst_id in $inst_az_2; do
 				break # сервер запущен
 			fi
 
-			echo "Status of instance with id: ${inst_id} is: ${inst_st}"
+			#echo "Status of instance with id: ${inst_id} is: ${inst_st}"
 			sleep 1; 
         done
 
@@ -73,9 +73,10 @@ while true; do
 			break # балансер запущен
 		fi
 
-		echo "Status of ALB is: ${alb_st}"
+		#echo "Status of ALB is: ${alb_st}"
 		sleep 1; 
 done
+echo "ALB is active."
 
 
 
