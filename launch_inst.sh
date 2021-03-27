@@ -23,8 +23,12 @@ done
 lb_arn=$(aws elbv2 create-load-balancer --name $3 --subnets $4 $5 --security-groups $6 --query "LoadBalancers"[].LoadBalancerArn --output text)
 vpc_id=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn --query "LoadBalancers"[].VpcId --output text)
 tgrp_arn=$(aws elbv2 create-target-group --name $7 --protocol HTTP --port 80 --vpc-id $vpc_id --query "TargetGroups"[].TargetGroupArn --output text)
-#aws elbv2 register-targets --target-group-arn $tgrp_arn --targets $instances
-#aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn
+
+for inst_id in $instances; do
+	aws elbv2 register-targets --target-group-arn $tgrp_arn --targets "Id=${inst_id}"
+done
+
+aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn
 
 
 
