@@ -1,6 +1,6 @@
 #! /bin/bash
 
-instances=$(sudo docker run --rm -v ~/.aws:/root/.aws amazon/aws-cli ec2 describe-instances --query "Reservations"[]."Instances"[].InstanceId --output text)
+instances=$(aws ec2 describe-instances --query "Reservations"[]."Instances"[].InstanceId --output text)
 
 for inst_id in $instances; do
 
@@ -17,7 +17,8 @@ for inst_id in $instances; do
         done
 
 	echo "Instance with id: ${inst_id} is running!!!"
-
+	$inst_id="Id="+$inst_id
+        echo "The new format of \"instances\": ${inst_id}"
 done
 
 
