@@ -2,8 +2,8 @@
 
 # Создаём инстансы в разных Availability Zones --- ДОБАВИТЬ Subnets!!! и запуск веб-сервера
 
-inst_az_1=$(aws ec2 run-instances --launch-template LaunchTemplateId=$1,Version=$2 --count 1 --query "Instances"[].InstanceId --output text)
-inst_az_2=$(aws ec2 run-instances --launch-template LaunchTemplateId=$1,Version=$2 --count 1 --query "Instances"[].InstanceId --output text)
+inst_az_1=$(aws ec2 run-instances --launch-template LaunchTemplateId=$1,Version=$2 --subnet-id $4 --user-data file://script1.txt --count 1 --query "Instances"[].InstanceId --output text)
+inst_az_2=$(aws ec2 run-instances --launch-template LaunchTemplateId=$1,Version=$2 --subnet-id $5 --user-data file://script2.txt --count 1 --query "Instances"[].InstanceId --output text)
 
 # Ожидаем запуска первой группы
 for inst_id in $inst_az_1; do
@@ -62,6 +62,21 @@ for inst_id in $inst_az_2; do
 	aws elbv2 register-targets --target-group-arn $tgrp_arn --targets "Id=${inst_id}"
 done
 
-# Создаём Listener для ALB -- нужно продумать output !!!
-aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn
+# Создаём Listener для ALB
+aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn > lsn.txt
+
+
+while true; do
+	alb_st="$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn --query "LoadBalancers"[].State.Code --output text)"
+		if [ "$alb_st" = "active" ] ; then				
+			
+			break # балансер запущен
+		fi
+
+		echo "Status of ALB is: ${alb_st}"
+		sleep 1; 
+done
+
+
+
 
