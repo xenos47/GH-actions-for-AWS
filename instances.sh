@@ -1,5 +1,6 @@
 #! /bin/bash
 
+declare -a id_instances
 instances=$(aws ec2 describe-instances --query "Reservations"[]."Instances"[].InstanceId --output text)
 
 for inst_id in $instances; do
@@ -18,6 +19,7 @@ for inst_id in $instances; do
 
 	echo "Instance with id: ${inst_id} is running!!!"
 	echo "Id=${inst_id}"
+	id_instances+=("Id=${inst_id}")
 	        
 done
 #
