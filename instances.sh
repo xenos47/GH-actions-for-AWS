@@ -17,8 +17,12 @@ for inst_id in $instances; do
         done
 
 	echo "Instance with id: ${inst_id} is running!!!"
-	$inst_id="Id="+"${inst_id}"
-        echo "The new format of \"instances\": ${inst_id}"
+	id_instances+=("Id="${inst_id})
+	        
+done
+
+for inst_id1 in $id_instances; do
+	echo "The new format: ${inst_id1}"
 done
 
 
