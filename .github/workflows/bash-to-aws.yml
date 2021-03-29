@@ -5,10 +5,9 @@
 
 name: EC2-Launch
 env:
+  COUNT_INST       : "2"
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
   TEMPLATE_VERSION : "1"
-  SUBNET1          : "subnet-b47000de"
-  SUBNET2          : "subnet-6a862916"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
   TARGET_GRP_NAME  : "test-target-group" 
@@ -45,7 +44,7 @@ jobs:
           
       # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: ./launch_inst.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} ${{ env.SECURITY_GROUP }} ${{ env.TARGET_GRP_NAME }}
+        run: ./launch_inst.sh ${{ env.COUNT_INST }} ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }}
     
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
