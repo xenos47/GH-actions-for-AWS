@@ -23,7 +23,13 @@ slots=${#subnets[*]}    # количество подсетей
 
 # Определяем количество инстансов для каждой подсети в массив $count_inst
 result=$((var / slots))
-k=$((var % slots ))
+
+if ((result = 0)); then
+	k=$var
+else
+	k=$((var % slots ))
+fi
+
 for ((i=0; i < $slots; i++)); do
 	if ((k > 0)); then
 		count_inst[i]=$((result + 1))
@@ -45,9 +51,10 @@ tgrp_arn=$(aws elbv2 create-target-group --name $5 --protocol HTTP --port 80 --v
 # Создаём инстансы в разных Availability Zones  !!! Добавить IP в вывод веб-сервера
 a=" "
 for ((i=0; i < $slots; i++)); do
-
-	new_inst="$(aws ec2 run-instances --launch-template LaunchTemplateId=$2,Version=$3 --subnet-id ${subnets[$i]} --user-data file://script.txt --count ${count_inst[i]} --query "Instances"[].InstanceId --output text)"
-	a="$new_inst $a"
+        if ((${count_inst[i]} > 0)); then
+		new_inst="$(aws ec2 run-instances --launch-template LaunchTemplateId=$2,Version=$3 --subnet-id ${subnets[$i]} --user-data file://script.txt --count ${count_inst[i]} --query "Instances"[].InstanceId --output text)"
+		a="$new_inst $a"
+	fi
 done
 read -a instances <<< $a
 
