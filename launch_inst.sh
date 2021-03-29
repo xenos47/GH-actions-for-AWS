@@ -26,13 +26,9 @@ result=$((var / slots))
 
 echo "var= $var slots= $slots result= $result"
 
-if ((result = 0)); then
-	k=$var
-else
-	k=$((var % slots ))
-fi
+k=$((var % slots ))
 
-echo "остаток k= $k"
+echo "var/slots= ${result} remainder= ${k}"
 
 for ((i=0; i < $slots; i++)); do
 	if ((k > 0)); then
