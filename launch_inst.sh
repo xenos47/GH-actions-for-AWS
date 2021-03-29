@@ -24,6 +24,8 @@ slots=${#subnets[*]}    # количество подсетей
 # Определяем количество инстансов для каждой подсети в массив $count_inst
 result=$((var / slots))
 
+echo "var= $var slots= $slots result= $result"
+
 if ((result = 0)); then
 	k=$var
 else
