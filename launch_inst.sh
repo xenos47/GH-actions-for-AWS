@@ -46,7 +46,7 @@ tgrp_arn=$(aws elbv2 create-target-group --name $5 --protocol HTTP --port 80 --v
 a=" "
 for ((i=0; i < $slots; i++)); do
 
-	new_inst="$(aws ec2 run-instances --launch-template LaunchTemplateId=$2,Version=$3 --subnet-id ${subnets[$i]} --user-data script1.txt --count ${count_inst[i]} --query "Instances"[].InstanceId --output text)"
+	new_inst="$(aws ec2 run-instances --launch-template LaunchTemplateId=$2,Version=$3 --subnet-id ${subnets[$i]} --user-data file://script.txt --count ${count_inst[i]} --query "Instances"[].InstanceId --output text)"
 	a="$new_inst $a"
 done
 read -a instances <<< $a
