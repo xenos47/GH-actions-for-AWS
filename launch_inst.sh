@@ -32,6 +32,8 @@ else
 	k=$((var % slots ))
 fi
 
+echo "остаток k= $k"
+
 for ((i=0; i < $slots; i++)); do
 	if ((k > 0)); then
 		count_inst[i]=$((result + 1))
