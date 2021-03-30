@@ -7,7 +7,7 @@ name: ASG-Launch
 env:
 # COUNT_INST       : "5"
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
-  TEMPLATE_VERSION : "2"
+  TEMPLATE_VERSION : "3"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
   TARGET_GRP_NAME  : "test-target-group"
