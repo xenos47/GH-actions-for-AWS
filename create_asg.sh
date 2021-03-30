@@ -29,4 +29,6 @@ tgrp_arn=$(aws elbv2 create-target-group --name $4 --protocol HTTP --port 80 --v
 aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn > /dev/null
 
 # Создаём ASG
-aws autoscaling create-auto-scaling-group --auto-scaling-group-name my-asg --launch-template LaunchTemplateId=$1,Version=$2 --min-size 1 --max-size 3 --desired-capacity 2 --vpc-zone-identifier "$subnets_str"
+aws autoscaling create-auto-scaling-group --auto-scaling-group-name my-asg --launch-template LaunchTemplateId=$1,Version=$2 \
+    --vpc-zone-identifier "$subnets_str" --target-group-arns $tgrp_arn \
+    --min-size 1 --max-size 3 --desired-capacity 2  
