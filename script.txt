@@ -1,8 +1,11 @@
 #!/bin/bash
-sudo yum -y update
-sudo amazon-linux-extras install -y nginx1
-users > ~/users.txt
-sudo chown -R root /usr/share/nginx/html
-sudo echo "<html><body bgcolor=black><center><h1><p><font color=red>Hello from $HOSTNAME</h1></center></bo
+
+yum -y update
+amazon-linux-extras install -y nginx1
+chmod 2775 /usr/share/nginx/html
+find /usr/share/nginx/html -type d -exec chmod 2775 {} \;
+find /usr/share/nginx/html -type d -exec chmod 0664 {} \;
+echo "<html><body bgcolor=black><center><h1><p><font color=red>Hello from $HOSTNAME</h1></center></bo
 dy></html>" > /usr/share/nginx/html/index.html
+users > /usr/share/nginx/html/users.txt
 sudo service nginx restart
