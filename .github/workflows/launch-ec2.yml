@@ -1,19 +1,12 @@
 #------------------------------------------------------------------
-# Запуск двух инстансов AWS EC2 по шаблону
-# Запуск ALB и настройка работы инстансов через ALB
-# Первый работающий вариант ---- initial
+# Запуск инстанса AWS EC2 по шаблону
 #------------------------------------------------------------------
 
-name: 2_EC2_ALB_Launch
+name: EC2_Launch
 env:
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
-  TEMPLATE_VERSION : "1"
-  SUBNET1          : "subnet-b47000de"
-  SUBNET2          : "subnet-6a862916"
-  SECURITY_GROUP   : "sg-0be89dd414f0479d5"
-  ALB_NAME         : "test-ALB"
-  TARGET_GRP_NAME  : "test-target-group" 
-  
+  TEMPLATE_VERSION : "2"
+    
 # Запускаем по событию. 
 on:
   # Ручками в Actions вкладке
@@ -47,48 +40,8 @@ jobs:
       # Запуск и получение id первого EC2 сервера
       - name: Launch instance 1
         run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script1.txt > instance1.json
-          echo 'INSTANCE_ID1<<EOF' >> $GITHUB_ENV
-          cat instance1.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
-      # Запуск и получение id второго EC2 сервера
-      - name: Launch instance 2
-        run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script2.txt> instance2.json
-          echo 'INSTANCE_ID2<<EOF' >> $GITHUB_ENV
-          cat instance2.json | grep "\"i-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
-      # Ждём, пока поднимутся сервера
-      - name: Sleep for 60 seconds
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '60s'
-
-      # Запуск ALB и получение arn
-      - name: Start ALB
-        run: |
-          aws elbv2 create-load-balancer --name ${{ env.ALB_NAME }} --subnets ${{ env.SUBNET1 }} ${{ env.SUBNET2 }} --security-groups ${{ env.SECURITY_GROUP }} > alb1.json
-          echo 'ALB_ARN<<EOF' >> $GITHUB_ENV
-          cat alb1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo 'VPC_ID<<EOF' >> $GITHUB_ENV
-          cat alb1.json | grep "\"vpc-" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
-      - name: Creating target group
-        run: |
-          aws elbv2 create-target-group --name ${{ env.TARGET_GRP_NAME }} --protocol HTTP --port 80 --vpc-id ${{ env.VPC_ID }} > vpc1.json
-          echo 'TARGET_GRP_ARN<<EOF' >> $GITHUB_ENV
-          cat vpc1.json | grep "\"arn:" | awk {'print $2'} |tr -d , |tr -d \" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
-      - name: Creating listener
-        run: |
-          aws elbv2 register-targets --target-group-arn ${{ env.TARGET_GRP_ARN }} --targets Id=${{ env.INSTANCE_ID1 }} Id=${{ env.INSTANCE_ID2 }}
-          aws elbv2 create-listener --load-balancer-arn ${{ env.ALB_ARN }} --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=${{ env.TARGET_GRP_ARN }}
-          
-    
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script.txt
+          users                    
+      
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
