@@ -10,7 +10,11 @@ env:
   TEMPLATE_VERSION : "1"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
-  TARGET_GRP_NAME  : "test-target-group" 
+  TARGET_GRP_NAME  : "test-target-group"
+  INS_MIN         : 2
+  INS_MAX         : 3
+  INS_DES         : 3
+  
   
 # Запускаем по событию. 
 on:
@@ -44,7 +48,7 @@ jobs:
           
       # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: ./create_asg.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }}
+        run: ./create_asg.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }} ${{ env.INS_MIN }} ${{ env.INS_MAX }} ${{ env.INS_DES }}
       # run: ./launch_inst.sh ${{ env.COUNT_INST }} ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }}
     
 #EOF    
