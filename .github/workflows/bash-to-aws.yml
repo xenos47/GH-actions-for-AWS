@@ -11,9 +11,9 @@ env:
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
   ALB_NAME         : "test-ALB"
   TARGET_GRP_NAME  : "test-target-group"
-  INS_MIN         : 2
-  INS_MAX         : 3
-  INS_DES         : 3
+  INS_MIN         : 1
+  INS_MAX         : 1
+  INS_DES         : 1
   
   
 # Запускаем по событию. 
