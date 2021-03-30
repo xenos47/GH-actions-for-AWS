@@ -40,8 +40,7 @@ jobs:
       # Запуск и получение id первого EC2 сервера
       - name: Launch instance 1
         run: |
-          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script.txt
-          users                    
+          aws ec2 run-instances --launch-template LaunchTemplateId=${{ env.TEMPLATE_ID }},Version=${{ env.TEMPLATE_VERSION }} --user-data file://script.txt                  
       
 #EOF    
 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
