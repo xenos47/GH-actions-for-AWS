@@ -1,7 +1,8 @@
 #!/bin/bash
 sudo yum -y update
 sudo amazon-linux-extras install -y nginx1
-users
+users > users.txt
+sudo chown root /usr/share/nginx/html
 sudo echo "<html><body bgcolor=black><center><h1><p><font color=red>Hello from $HOSTNAME</h1></center></bo
 dy></html>" > /usr/share/nginx/html/index.html
 sudo service nginx restrat
