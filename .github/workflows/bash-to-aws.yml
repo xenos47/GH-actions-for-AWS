@@ -8,12 +8,11 @@ env:
 # COUNT_INST       : "5"
   TEMPLATE_ID      : "lt-04b30e2dc9209f94b"
   TEMPLATE_VERSION : "3"
+  NAME             : "Test"
   SECURITY_GROUP   : "sg-0be89dd414f0479d5"
-  ALB_NAME         : "test-ALB"
-  TARGET_GRP_NAME  : "test-target-group"
-  INS_MIN         : 1
-  INS_MAX         : 1
-  INS_DES         : 1
+  INS_MIN         : 2
+  INS_MAX         : 3
+  INS_DES         : 3
   
   
 # Запускаем по событию. 
@@ -48,7 +47,7 @@ jobs:
           
       # Запускаем bash скрипт, пытаясь передать параметры
       - name: Executing bash-script
-        run: ./create_asg.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }} ${{ env.INS_MIN }} ${{ env.INS_MAX }} ${{ env.INS_DES }}
+        run: ./create_asg.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.NAME }} ${{ env.SECURITY_GROUP }} ${{ env.INS_MIN }} ${{ env.INS_MAX }} ${{ env.INS_DES }}
       # run: ./launch_inst.sh ${{ env.COUNT_INST }} ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }}
     
 #EOF    
