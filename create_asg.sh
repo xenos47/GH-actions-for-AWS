@@ -16,18 +16,28 @@ read -a subnets <<< $(aws ec2 describe-subnets --query "Subnets"[].SubnetId --ou
 subnets_str=`echo ${subnets[@]} | tr ' ' ','`
 
 # Создаём Load Balancer
-lb_arn=$(aws elbv2 create-load-balancer --name "$3-ALB" --subnets ${subnets[*]} --security-groups $4 --query "LoadBalancers"[].LoadBalancerArn --output text)
+lb_arn=$(aws elbv2 create-load-balancer --name "$3-ALB" --subnets ${subnets[*]} \
+  --security-groups $4 --query "LoadBalancers"[].LoadBalancerArn --output text)
 
 # Получаем ID VPC, в которой создан Load Balancer
-vpc_id=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn --query "LoadBalancers"[].VpcId --output text)
+vpc_id=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn \
+  --query "LoadBalancers"[].VpcId --output text)
 
 # Создаём Target Group
-tgrp_arn=$(aws elbv2 create-target-group --name "$3-TG" --protocol HTTP --port 80 --vpc-id $vpc_id --query "TargetGroups"[].TargetGroupArn --output text)
+tgrp_arn=$(aws elbv2 create-target-group --name "$3-TG" --protocol HTTP --port 80 \
+  --vpc-id $vpc_id --query "TargetGroups"[].TargetGroupArn --output text)
 
 # Создаём Listener для ALB
-aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$tgrp_arn > /dev/null
+aws elbv2 create-listener --load-balancer-arn $lb_arn --protocol HTTP --port 80 \
+  --default-actions Type=forward,TargetGroupArn=$tgrp_arn > /dev/null
 
 # Создаём ASG
-aws autoscaling create-auto-scaling-group --auto-scaling-group-name "$3-ASG" --launch-template LaunchTemplateId=$1,Version=$2 \
+aws autoscaling create-auto-scaling-group --auto-scaling-group-name "$3-ASG" \
+    --launch-template LaunchTemplateId=$1,Version=$2 \
     --vpc-zone-identifier "$subnets_str" --target-group-arns $tgrp_arn \
-    --min-size $5 --max-size $6 --desired-capacity $7  
+    --min-size $5 --max-size $6 --desired-capacity $7
+    
+# Добавляем scaling policy
+aws autoscaling put-scaling-policy --policy-name cpu50-TTS-policy \
+  --auto-scaling-group-name "$3-ASG" --policy-type TargetTrackingScaling \
+  --target-tracking-configuration file://config.json
