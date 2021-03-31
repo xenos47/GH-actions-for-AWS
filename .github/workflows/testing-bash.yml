@@ -1,0 +1,47 @@
+#------------------------------------------------------------------
+# Запуск тестового bash-скрипта 
+#------------------------------------------------------------------
+
+name: Test-Launch
+env:
+  NAME             : "My"
+  SECURITY_GROUP   : "sg-0be89dd414f0479d5"
+    
+# Запускаем по событию. 
+on:
+  # Ручками в Actions вкладке
+  workflow_dispatch:
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  
+  # Задача: Запуск серверов
+  Test-launch:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Используем настроенную среду
+    environment:
+      name: My_AWS
+      
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Аутентификация
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id      : ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key  : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region             : "eu-central-1"
+          
+      # Запускаем bash скрипт, пытаясь передать параметры
+      - name: Executing bash-script
+        run: ./testing-bash.sh ${{ env.NAME }} ${{ env.SECURITY_GROUP }}
+      # run: ./create_asg.sh ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }} ${{ env.INS_MIN }} ${{ env.INS_MAX }} ${{ env.INS_DES }}
+      # run: ./launch_inst.sh ${{ env.COUNT_INST }} ${{ env.TEMPLATE_ID }} ${{ env.TEMPLATE_VERSION }} ${{ env.ALB_NAME }} ${{ env.TARGET_GRP_NAME }} ${{ env.SECURITY_GROUP }}
+    
+#EOF    
+#""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
