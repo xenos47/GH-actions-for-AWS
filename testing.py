@@ -60,38 +60,3 @@ response = elb_client.create_listener(
             Protocol='HTTP',
             )
 
-# Creating Autoscaling Group
-launch_template_id = "lt-04b30e2dc9209f94b"
-autoscaling_group_name = 'awspy_autoscaling_group'
-cpu_utilization_trigger_value = 80
-
-response = asg_client.create_auto_scaling_group(
-            AutoScalingGroupName = autoscaling_group_name,
-            LaunchTemplate={
-                'LaunchTemplateId': launch_template_id,
-            },
-            MinSize=1,
-            MaxSize=1,
-            DesiredCapacity=1,
-            TargetGroupARNs=listTargetGroupArn,
-            AvailabilityZones=listAvailabilityZones,
-            )
-
-response = asg_client.put_scaling_policy( 
-            AutoScalingGroupName = autoscaling_group_name,
-            PolicyName = 'AverageCPUUtilization',
-            PolicyType = 'TargetTrackingScaling',
-            AdjustmentType = 'PercentChangeInCapacity',
-            EstimatedInstanceWarmup = 60,
-            TargetTrackingConfiguration = { 
-                'CustomizedMetricSpecification': { 
-                    'MetricName': 'CPUUtilization',
-                    'Namespace': 'AWS/EC2',
-                    'Dimensions': [{
-                        'Name': 'AutoScalingGroupName',
-                        'Value': autoscaling_group_name }],
-                    'Statistic': 'Average', 
-                    'Unit': 'Percent'},
-                'TargetValue': cpu_utilization_trigger_value })
-
-
